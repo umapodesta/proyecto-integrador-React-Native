@@ -95,8 +95,15 @@ class Register extends Component{
                 {/*Boton para Registrarse si está todo el formulario completo */}
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.username)}
-                    disabled={!(this.state.email && this.state.password && this.state.username)}>
+                    onPress={() => {
+                        // Si todos los campos estén completos se ejecuta el onSubmit
+                        if (this.state.email && this.state.password && this.state.username) {
+                            this.onSubmit(this.state.email, this.state.password, this.state.username);
+                        } else {
+                            // Si no están todos completos se cambia el mensaje de error
+                            this.setState({ error: "Todos los campos son obligatorios" });
+                        }
+                    }}>
                     <Text style={styles.buttonText}>Registrarse</Text>
                 </TouchableOpacity>
 
@@ -136,9 +143,6 @@ const styles = StyleSheet.create({
         borderColor: "#B0BEC5", 
         borderRadius: 8, 
         backgroundColor: "#fff", 
-        shadowColor: "#B0BEC5", 
-        shadowOpacity: 0.2, 
-        shadowRadius: 6, 
     },
     error: {
         color: "red",
