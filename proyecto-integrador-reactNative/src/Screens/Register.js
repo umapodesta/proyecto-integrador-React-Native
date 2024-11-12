@@ -1,6 +1,6 @@
 import { Component } from "react";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
-import { auth, db } from "../firebase/config";
+import { auth, db } from "../Firebase/config";
 
 class Register extends Component{
     constructor(props){
@@ -11,6 +11,23 @@ class Register extends Component{
             username: "",
             error: "",
         };
+    }
+    componentDidMount(){
+        auth.onAuthStateChanged(user => {
+            console.log(user)
+            if(user){
+                this.props.navigation.navigate('Login');
+            }
+        })
+    }
+
+    //Verifica que esté completo el formulario
+    esFormularioCompleto(){
+        const emailCompleto = this.state.email !== "";
+        const passwordCompleto = this.state.password !== "";
+        const usernameCompleto = this.state.username !== "";
+
+        return emailCompleto && passwordCompleto && usernameCompleto;
     }
     
     onSubmit(email, password, username) {
@@ -42,7 +59,7 @@ class Register extends Component{
             })      
           })
           .catch(error => {
-            this.setState({ error: error.message });  
+            this.setState({ error: error.message });//preguntar esto, porque es una función de firebase que encontré en YT  
             console.log(error.message);
           });
       }
@@ -56,7 +73,6 @@ class Register extends Component{
                 <TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
                     <Text style={styles.link}>Ir a login</Text>
                 </TouchableOpacity>
-
 
                 {/*Campos del formulario */}
                 <View style={styles.inputContainer}>
@@ -90,20 +106,19 @@ class Register extends Component{
                     />
                 </View>
                 
-                {/* Mensaje de error si hay campos vacíos */}
-
-                {this.state.error ? <Text style={styles.error}>{this.state.error}</Text> : null}
-
-                {/*Boton para Registrarse si está todo el formulario completo */}
-                {(this.state.email && this.state.password && this.state.username) ? (
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.username)}>
-                        <Text style={styles.buttonText}>Registrarse</Text>
+                {this.esFormularioCompleto() ? (
+                    <TouchableOpacity style = {styles.button} onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.username)}>
+                        <Text style={styles.buttonText}> Registrarse </Text>
                     </TouchableOpacity>
-                ) : null}
+                ) : (
+                    <Text style={styles.inactiveText}> Completa todos los campos para registrarte </Text>
+                )}
 
-            </View>
+                {/* Mensaje de error si hay campos vacíos */}
+                <View>
+                    {this.state.error ? <Text style={styles.error}>{this.state.error}</Text> : null}
+                </View>
+        </View>
         )
     }
 }
@@ -158,6 +173,11 @@ const styles = StyleSheet.create({
         fontSize: 18, 
         fontWeight: "600", 
         textAlign: "center",
+    },
+    inactiveText: {
+        color: "#999",
+        fontSize: 16,
+        marginTop: 30,
     },
 });
 
