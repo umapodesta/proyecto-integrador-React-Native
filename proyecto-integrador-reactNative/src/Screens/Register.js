@@ -1,6 +1,6 @@
 import { Component } from "react";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
-import { auth, db } from "../Firebase/config";
+import { auth, db } from "../firebase/config";
 
 class Register extends Component{
     constructor(props){
@@ -55,6 +55,10 @@ class Register extends Component{
                 </Text>
                 <TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
                     <Text style={styles.link}>Ir a login</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate("Post")}>
+                    <Text style={styles.link}>Publicar post</Text>
                 </TouchableOpacity>
 
                 {/*Campos del formulario */}
