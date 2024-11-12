@@ -57,9 +57,6 @@ class Register extends Component{
                     <Text style={styles.link}>Ir a login</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate("Post")}>
-                    <Text style={styles.link}>Publicar post</Text>
-                </TouchableOpacity>
 
                 {/*Campos del formulario */}
                 <View style={styles.inputContainer}>
