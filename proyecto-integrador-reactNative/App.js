@@ -4,12 +4,12 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Register from './src/Screens/Register';
-import Home from './src/screens/Home';
+import Home from './src/Screens/Home';
 import Login from './src/Screens/Login';
-import Profile from './src/components/Profile';
-import HomeMenu from './src/components/HomeMenu';
-import NewPost from './src/screens/NewPost';
-import Post from './src/components/Post';
+import Profile from './src/Components/Profile';
+import HomeMenu from './src/Components/HomeMenu';
+import NewPost from './src/Screens/NewPost';
+import Post from './src/Components/Post';
 
 const Stack = createNativeStackNavigator(); // Definir el Stack
 

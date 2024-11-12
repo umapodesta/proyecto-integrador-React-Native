@@ -1,6 +1,6 @@
 import { Component } from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native"
-import {db} from "../firebase/config"
+import {db} from "../Firebase/config"
 
 class NewPost extends Component {
     constructor(){
@@ -85,4 +85,4 @@ class NewPost extends Component {
     });
 
 
-export default NewPost
+export default NewPost;
