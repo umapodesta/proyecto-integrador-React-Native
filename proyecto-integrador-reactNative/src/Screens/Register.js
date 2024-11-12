@@ -42,7 +42,8 @@ class Register extends Component{
             })      
           })
           .catch(error => {
-            this.setState({ error: 'Fallo en el registro.' });
+            this.setState({ error: error.message });  
+            console.log(error.message);
           });
       }
 
@@ -93,19 +94,13 @@ class Register extends Component{
                 {this.state.error ? <Text style={styles.error}>{this.state.error}</Text> : null}
 
                 {/*Boton para Registrarse si está todo el formulario completo */}
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {
-                        // Si todos los campos estén completos se ejecuta el onSubmit
-                        if (this.state.email && this.state.password && this.state.username) {
-                            this.onSubmit(this.state.email, this.state.password, this.state.username);
-                        } else {
-                            // Si no están todos completos se cambia el mensaje de error
-                            this.setState({ error: "Todos los campos son obligatorios" });
-                        }
-                    }}>
-                    <Text style={styles.buttonText}>Registrarse</Text>
-                </TouchableOpacity>
+                {(this.state.email && this.state.password && this.state.username) ? (
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.username)}>
+                        <Text style={styles.buttonText}>Registrarse</Text>
+                    </TouchableOpacity>
+                ) : null}
 
             </View>
         )
