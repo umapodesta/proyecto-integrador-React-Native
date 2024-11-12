@@ -1,6 +1,6 @@
 import { Component } from "react";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
-import { auth, db } from "../Firebase/config";
+import { auth, db } from "../firebase/config";
 
 class Register extends Component{
     constructor(props){

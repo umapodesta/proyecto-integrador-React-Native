@@ -1,7 +1,9 @@
 import { Component } from "react";
 
-class HomeMenu extends Component {
 
-}
+class HomeMenu extends Component {
+    render() {
+
+}}
 
 export default HomeMenu

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native"
-import {db} from "../Firebase/config"
+import {db, auth} from "../firebase/config"
 
 class NewPost extends Component {
     constructor(){
@@ -8,7 +8,7 @@ class NewPost extends Component {
         this.state= {
             email:"",
             post:"",
-            loading:true
+           
          }
     }
 

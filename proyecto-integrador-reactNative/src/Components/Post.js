@@ -1,6 +1,6 @@
 import { Component } from "react";
 import {Text, View} from "react-native";
-import NewPost from "../Screens/NewPost";
+import NewPost from "../screens/NewPost";
 
 class Post extends Component {
     constructor(props) {  

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from "react-native";
-import { auth } from "../Firebase/config";
+import { auth } from "../firebase/config";
 
 class Login extends Component{
     constructor(props){
