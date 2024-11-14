@@ -16,7 +16,7 @@ class Home extends Component {
 
     componentDidMount() { 
         if (firebase.auth().currentUser) {
-            this.setState({ authenticated: true }); 
+            this.setState({ authenticated: false }); 
 
             db.collection('post')
                 .orderBy('createdAt', 'desc')
@@ -70,7 +70,7 @@ class Home extends Component {
         }
 }
 
-const style= StyleSheet.create({
+const styles= StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',

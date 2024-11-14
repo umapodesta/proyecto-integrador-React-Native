@@ -47,10 +47,10 @@ class Post extends Component {
                 {
                     this.state.like ? 
                     <TouchableOpacity onPress={() => this.dislike(this.props.post.id)}>
-                        <AntDesign name="dislike2" size={24} color="black" />
+                        <AntDesign name="dislike2" style={styles.likeIcon} color="black" />
                     </TouchableOpacity> :
                     <TouchableOpacity onPress={() => this.like(this.props.post.id)}>
-                        <AntDesign name="like2" size={24} color="black" />
+                        <AntDesign name="like2" style={styles.likeIcon} color="black" />
                     </TouchableOpacity>
                 }
             
@@ -71,6 +71,10 @@ const styles = StyleSheet.create({
     content: {
         marginBottom: 10,
     },
+    likeIcon: {
+        fontSize: 16, 
+        padding: 5,   
+    }
 
 });
 
