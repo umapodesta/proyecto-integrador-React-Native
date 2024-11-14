@@ -37,6 +37,7 @@ class NewPost extends Component {
    
   render() {
     if (!this.state.authenticated) {
+      
       return (
           <View style={styles.container}>
               <Text style={styles.header}>Debes estar logueado para crear un post.</Text>

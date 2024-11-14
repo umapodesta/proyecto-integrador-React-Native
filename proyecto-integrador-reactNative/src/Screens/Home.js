@@ -16,7 +16,7 @@ class Home extends Component {
 
     componentDidMount() { 
         if (firebase.auth().currentUser) {
-            this.setState({ authenticated: false }); 
+            this.setState({ authenticated: true }); 
 
             db.collection('post')
                 .orderBy('createdAt', 'desc')
