@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { db, auth } from '../firebase/config';
 import firebase from 'firebase'
 import Post from '../components/Post';
@@ -9,31 +9,46 @@ class Home extends Component {
         super(props);
         this.state = {
             post: [],     
-            loading: true
+            loading: true,
+            authenticated: false,
         };
     }
 
     componentDidMount() { 
-        if (!firebase.auth().currentUser) {
-            console.log("No hay usuario logueado.");
-            return;
-        }
+        if (firebase.auth().currentUser) {
+            this.setState({ authenticated: true }); 
 
-        db.collection('post')
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(docs => {
-        let post=[]
-        docs.forEach(docs => post.push({
-        id: docs.id,
-        data: docs.data()
-            }))
-        this.setState({
-        post: post,
-        loading: false
-        })
-        }) }
+            db.collection('post')
+                .orderBy('createdAt', 'desc')
+                .onSnapshot(docs => {
+                    let post = [];
+                    docs.forEach(doc => post.push({
+                        id: doc.id,
+                        data: doc.data(),
+                    }));
+                    this.setState({
+                        post: post,
+                        loading: false,
+                    });
+                });
+        } else {
+            console.log("No hay usuario logueado.");
+            this.setState({ loading: false }); 
+        }
+    }
 
         render() {
+            if (!this.state.authenticated) { 
+            
+            return (
+                <View style={styles.container}>
+                    <Text>Debes iniciar sesión para ver el contenido.</Text>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                        <Text>Ir a Iniciar Sesión</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+            }
             return (
                 <View>
                     {this.state.loading ? (
@@ -54,6 +69,14 @@ class Home extends Component {
             );
         }
 }
+
+const style= StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+})
 
 
 export default Home;

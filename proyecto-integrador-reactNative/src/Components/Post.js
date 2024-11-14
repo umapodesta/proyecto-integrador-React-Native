@@ -1,18 +1,59 @@
 import { Component } from "react";
-import {Text,StyleSheet, View} from "react-native";
-import NewPost from "../screens/NewPost";
+import {Text,TouchableOpacity, StyleSheet, View} from "react-native";
+import {db, auth} from "../firebase/config"
+import firebase from 'firebase'
+import AntDesign from '@expo/vector-icons/AntDesign';
+
 
 class Post extends Component {
     constructor(props) {  
         super(props);
-
+        this.state = {
+            like: false,
     }
+    }
+    like(post){
+        db.collection('post')
+        .doc(post)
+        .update({
+           likes: firebase.firestore.FieldValue.arrayUnion(firebase.auth().currentUser.email)
+       })
+       .then(()=>{
+        this.setState({
+          like:true
+        })
+       
+       })
+    }
+    
+    dislike(post){
+      db.collection('post')
+      .doc(post)
+      .update({
+         likes: firebase.firestore.FieldValue.arrayRemove(firebase.auth().currentUser.email)
+     })
+     .then(()=>{
+      this.setState({
+        like:false
+      })
+     })
+    }
+
     render() {
         return (
             <View style={styles.post}>
                 <Text style={styles.owner}>Publicado por: {this.props.post.data.owner}</Text>
                 <Text style={styles.content}>{this.props.post.data.post}</Text>
-
+                {
+                    this.state.like ? 
+                    <TouchableOpacity onPress={() => this.dislike(this.props.post.id)}>
+                        <AntDesign name="dislike2" size={24} color="black" />
+                    </TouchableOpacity> :
+                    <TouchableOpacity onPress={() => this.like(this.props.post.id)}>
+                        <AntDesign name="like2" size={24} color="black" />
+                    </TouchableOpacity>
+                }
+            
             </View>
         );
     }

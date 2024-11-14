@@ -7,35 +7,47 @@ class NewPost extends Component {
     constructor(){
         super()
         this.state= {
-            post:"",    
+            post:"",
+            authenticated: false,
+   
          }
     }
 
-    publish(){    
-      // Verifico que el usuario esta logueado, porque si no no puede hacer el post 
-      if (!firebase.auth().currentUser) {
-          console.log("No hay usuario logueado.");
-          //Si no esta logueado, que vaya al login
-        this.props.navigation.navigate("Login"); 
-          return;
-      }
-
-      db.collection('post').add({
-          owner: firebase.auth().currentUser.email,  
-          post: this.state.post,
-          createdAt: Date.now()
-      })
-      .then(() => {
-          console.log("Post creado con éxito");
-          this.setState({ post: "" }); 
-
-          //Luego de publicar, lo lleve a home: 
-          this.props.navigation.navigate("Home"); 
-      })
-      .catch((error) => console.log("Error al crear el post:", error)); 
-  }
+    publish() {   
+      if (firebase.auth().currentUser) {
+        this.setState({ authenticated: true });
     
+        db.collection('post').add({
+            owner: firebase.auth().currentUser.email,  
+            post: this.state.post,
+            createdAt: Date.now()
+        })
+        .then(() => {
+            console.log("Post creado con éxito");
+            this.setState({ post: "" });
+    
+            this.props.navigation.navigate("Home");
+        })
+        .catch((error) => console.log("Error al crear el post:", error));
+      } else {
+        console.log("No hay usuario logueado.");
+        this.setState({ loading: false });
+      }
+    }
+   
   render() {
+    if (!this.state.authenticated) {
+      return (
+          <View style={styles.container}>
+              <Text style={styles.header}>Debes estar logueado para crear un post.</Text>
+              <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.props.navigation.navigate("Login")}>
+                  <Text style={styles.buttonText}>Iniciar Sesión</Text>
+              </TouchableOpacity>
+          </View>
+      );
+  }
         return (
           <View style={styles.container}>
             <Text style={styles.header}>Publicar un Nuevo Post</Text>
@@ -51,7 +63,6 @@ class NewPost extends Component {
             />
 
 
-    
             {/* Botón para publicar */}
             <TouchableOpacity
               style={styles.button}
@@ -92,7 +103,7 @@ class NewPost extends Component {
         paddingHorizontal: 10,
       },
       button: {
-        backgroundColor: "#28a745",
+        backgroundColor: "#5C6BC0",
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 6,
