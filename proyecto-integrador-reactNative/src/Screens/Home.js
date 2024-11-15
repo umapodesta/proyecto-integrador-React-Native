@@ -51,6 +51,7 @@ class Home extends Component {
             }
             return (
                 <View>
+                    
                     {this.state.loading ? (
                         <ActivityIndicator size="large" color="#0000ff" />
                     ) : (
@@ -60,10 +61,18 @@ class Home extends Component {
                             renderItem={({ item }) => <Post post={item} email={this.props.email} />}
                         />
                     )}
-                
+
                 <TouchableOpacity onPress={()=>this.props.navigation.navigate("NewPost")}>
-                <Text >Hacer un post </Text>
+                    <Text >Hacer un post </Text>
                 </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.postButton} 
+                    onPress={() => this.props.navigation.navigate('SearchUser')}
+                >
+                    <Text style={styles.postButtonText}>Buscar usuario</Text>
+                </TouchableOpacity>
+                
+                
           
                 </View>
             );
