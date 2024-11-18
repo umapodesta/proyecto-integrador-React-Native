@@ -3,6 +3,7 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View }
 import { db, auth } from '../firebase/config';
 import firebase from 'firebase'
 import Post from '../components/Post';
+import HomeMenu from '../components/HomeMenu';
 
 class Home extends Component {
     constructor(props) {
@@ -38,20 +39,12 @@ class Home extends Component {
     }
 
         render() {
-            if (!this.state.authenticated) { 
             
-            return (
-                <View style={styles.container}>
-                    <Text>Debes iniciar sesión para ver el contenido.</Text>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text>Ir a Iniciar Sesión</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-            }
             return (
                 <View>
                     
+                    
+
                     {this.state.loading ? (
                         <ActivityIndicator size="large" color="#0000ff" />
                     ) : (
@@ -72,9 +65,10 @@ class Home extends Component {
                     <Text style={styles.postButtonText}>Buscar usuario</Text>
                 </TouchableOpacity>
                 
-                
+                <HomeMenu/>
           
                 </View>
+
             );
         }
 }

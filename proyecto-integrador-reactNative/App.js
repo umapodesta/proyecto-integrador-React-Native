@@ -10,7 +10,7 @@ import Post from './src/components/Post';
 import Home from './src/screens/Home';
 import Register from './src/screens/Register';
 import SearchUser from './src/screens/SearchUser';
-import HomeMenu from './src/components/HomeMenu';
+//import HomeMenu from './src/components/HomeMenu';
 
 const Stack = createNativeStackNavigator(); // Definir el Stack
 
@@ -22,7 +22,6 @@ export default function App() {
         <Stack.Screen name="Home" component={Home}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Profile" component={Profile}/>
-        <Stack.Screen name="HomeMenu" component={HomeMenu}/>
         <Stack.Screen name="NewPost" component={NewPost}/>
         <Stack.Screen name="Post" component={Post}/>
         <Stack.Screen name="SearchUser" component={SearchUser}/>
