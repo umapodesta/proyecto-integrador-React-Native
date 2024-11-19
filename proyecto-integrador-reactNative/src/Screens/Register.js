@@ -9,6 +9,7 @@ class Register extends Component{
             email: "",
             password: "",
             username: "",
+            registered: false,
             error: "",
         };
     }
@@ -21,48 +22,43 @@ class Register extends Component{
         })
     }
 
-    //Verifica que esté completo el formulario
-    esFormularioCompleto(){
-        const emailCompleto = this.state.email !== "";
-        const passwordCompleto = this.state.password !== "";
-        const usernameCompleto = this.state.username !== "";
-
-        return emailCompleto && passwordCompleto && usernameCompleto;
-    }
-    
     onSubmit(email, password, username) {
-        if (email == "") {
-            this.setState({ error: "El email es obligatorio" });
+        if (email === "") {
+            this.setState({ error: "El campo de email es obligatorio." });
             console.log("El email está vacío");
             return;
         }
-        if (password == "") {
-            this.setState({ error: "La contraseña es obligatoria" });
-            console.log("La password está vacía");
+    
+        if (password === "") {
+            this.setState({ error: "El campo de contraseña es obligatorio." });
+            console.log("La contraseña está vacía");
             return;
         }
-        if (username == "") {
-            this.setState({ error: "El nombre de usuario es obligatorio" });
-            console.log("El usuario está vacío");
+    
+        if (username === "") {
+            this.setState({ error: "El campo de nombre de usuario es obligatorio." });
+            console.log("El nombre de usuario está vacío");
             return;
-        }    
+        }
+    
         auth.createUserWithEmailAndPassword(email, password)
-          .then((response) => {
-            db.collection("users").add({
-                email: email,
-                username: username,
-                createdAt: Date.now(),
+            .then((response) => {
+                db.collection("users").add({
+                    email: email,
+                    username: username,
+                    createdAt: Date.now(),
+                })
+                .then(() => {
+                    this.setState({ registered: true });
+                    this.props.navigation.navigate('Login');
+                });
             })
-          .then(response => {
-            this.setState({ registered: true });
-            this.props.navigation.navigate('Login');
-            })      
-          })
-          .catch(error => {
-            this.setState({ error: error.message });//preguntar esto, porque es una función de firebase que encontré en YT  
-            console.log(error.message);
-          });
-      }
+            .catch(error => {
+                this.setState({ error: error.message });
+                console.log(error.message);
+            });
+    }
+    
 
     render(){
         return(
@@ -70,11 +66,6 @@ class Register extends Component{
                 <Text style={styles.title}>
                     Formulario de Registro
                 </Text>
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
-                    <Text style={styles.link}>Ir a login</Text>
-                </TouchableOpacity>
-                
-
 
                 {/*Campos del formulario */}
                 <View style={styles.inputContainer}>
@@ -108,14 +99,21 @@ class Register extends Component{
                     />
                 </View>
                 
-                {this.esFormularioCompleto() ? (
-                    <TouchableOpacity style = {styles.button} onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.username)}>
-                        <Text style={styles.buttonText}> Registrarse </Text>
-                    </TouchableOpacity>
-                ) : (
-                    <Text style={styles.inactiveText}> Completa todos los campos para registrarte </Text>
-                )}
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
+                    <Text style={styles.link}>Ir a login</Text>
+                </TouchableOpacity>
 
+                {/* Mostrar el botón solo si todos los campos están completos */}
+                {this.state.email !== "" && this.state.password !== "" && this.state.username !== "" ? (
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => this.onSubmit(this.state.email, this.state.password, this.state.username)}
+                >
+                    <Text style={styles.buttonText}>Registrarse</Text>
+                    </TouchableOpacity>
+                    ) : (
+                    <Text style={[styles.noButton]}>Registrarse</Text>
+                    )}
                 {/* Mensaje de error si hay campos vacíos */}
                 <View>
                     {this.state.error ? <Text style={styles.error}>{this.state.error}</Text> : null}
@@ -172,6 +170,12 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: "#fff",
+        fontSize: 18, 
+        fontWeight: "600", 
+        textAlign: "center",
+    },
+    noButton: {
+        color: "#B0BEC5",
         fontSize: 18, 
         fontWeight: "600", 
         textAlign: "center",

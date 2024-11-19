@@ -3,8 +3,8 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Profile from '../components/Profile';  
-import Home from '../screens/Home';
 import NewPost from '../screens/NewPost';
+import Home from "../screens/Home";
 
 
 const Tab = createBottomTabNavigator();
