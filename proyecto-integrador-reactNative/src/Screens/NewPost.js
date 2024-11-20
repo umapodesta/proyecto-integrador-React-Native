@@ -8,74 +8,59 @@ class NewPost extends Component {
         super()
         this.state= {
             post:"",
-            authenticated: false,
    
          }
     }
 
-    publish() {   
-      if (firebase.auth().currentUser) {
-        this.setState({ authenticated: true });
-    
-        db.collection('post').add({
-            owner: firebase.auth().currentUser.email,  
-            post: this.state.post,
-            createdAt: Date.now()
-        })
-        .then(() => {
-            console.log("Post creado con éxito");
-            this.setState({ post: "" });
-    
-            this.props.navigation.navigate("Home");
-        })
-        .catch((error) => console.log("Error al crear el post:", error));
-      } else {
-        console.log("No hay usuario logueado.");
-        this.setState({ loading: false });
+    publish(){    
+      if (!firebase.auth().currentUser) {
+          console.log("No hay usuario logueado.");
+        this.props.navigation.navigate("Login"); 
+          return;
       }
-    }
+      db.collection('post').add({
+          owner: firebase.auth().currentUser.email,  
+          post: this.state.post,
+          createdAt: Date.now()
+      })
+      .then(() => {
+          console.log("Post creado con éxito");
+          this.setState({ post: "" }); 
+          //Luego de publicar, lo lleve a home: 
+          this.props.navigation.navigate("Home"); 
+      })
+      .catch((error) => console.log("Error al crear el post:", error)); 
+  }
+    
    
   render() {
-    if (!this.state.authenticated) {
-      
-      return (
-          <View style={styles.container}>
-              <Text style={styles.header}>Debes estar logueado para crear un post.</Text>
-              <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => this.props.navigation.navigate("Login")}>
-                  <Text style={styles.buttonText}>Iniciar Sesión</Text>
-              </TouchableOpacity>
-          </View>
+      return ( <View style={styles.container}>
+        <Text style={styles.header}>Publicar un Nuevo Post</Text>
+
+        {/* Input para el contenido del Post */}
+        <TextInput
+          style={styles.inputComment}
+          keyboardType='default'
+          placeholder="Escribe tu post..."
+          onChangeText={text => this.setState({post:text})}
+          value={this.state.post}
+        
+        />
+
+
+        {/* Botón para publicar */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.publish()}>
+          <Text style={styles.buttonText}>
+            Publicar
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       );
-  }
-        return (
-          <View style={styles.container}>
-            <Text style={styles.header}>Publicar un Nuevo Post</Text>
-    
-            {/* Input para el contenido del Post */}
-            <TextInput
-              style={styles.inputComment}
-              keyboardType='default'
-              placeholder="Escribe tu post..."
-              onChangeText={text => this.setState({post:text})}
-              value={this.state.post}
-            
-            />
-
-
-            {/* Botón para publicar */}
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.publish()}>
-              <Text style={styles.buttonText}>
-                Publicar
-              </Text>
-            </TouchableOpacity>
-          </View>
-        );
+  }   
       }
-    }
     
     const styles = StyleSheet.create({
       container: {

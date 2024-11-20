@@ -102,6 +102,9 @@ class Register extends Component{
                 <TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
                     <Text style={styles.link}>Ir a login</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate("NewPost")}>
+                    <Text style={styles.link}>Hacer un post</Text>
+                </TouchableOpacity>
 
                 {/* Mostrar el botón solo si todos los campos están completos */}
                 {this.state.email !== "" && this.state.password !== "" && this.state.username !== "" ? (
