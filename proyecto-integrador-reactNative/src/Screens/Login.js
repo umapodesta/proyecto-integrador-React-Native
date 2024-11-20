@@ -17,7 +17,7 @@ class Login extends Component{
         auth.onAuthStateChanged(user => {
             console.log(user)
             if(user){
-                this.props.navigation.navigate('Home');
+                this.props.navigation.navigate('HomeMenu');
             }
         })
     }
@@ -36,7 +36,7 @@ class Login extends Component{
         auth.signInWithEmailAndPassword(email, password)
           .then((response) => {
             this.setState({ loggedIn: true });
-            this.props.navigation.navigate('Home');
+            this.props.navigation.navigate('HomeMenu');
           })
           .catch(error => {
             this.setState({ error: 'Credenciales inválidas.' });

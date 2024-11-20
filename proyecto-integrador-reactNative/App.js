@@ -7,10 +7,10 @@ import Login from './src/screens/Login';
 import Profile from './src/components/Profile';
 import NewPost from './src/screens/NewPost';
 import Post from './src/components/Post';
-import Home from './src/screens/Home';
+//import Home from './src/screens/Home';
 import Register from './src/screens/Register';
 import SearchUser from './src/screens/SearchUser';
-//import HomeMenu from './src/components/HomeMenu';
+import HomeMenu from './src/components/HomeMenu';
 
 const Stack = createNativeStackNavigator(); // Definir el Stack
 
@@ -19,7 +19,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator >
         <Stack.Screen name="Register" component={Register}/>
-        <Stack.Screen name="Home" component={Home}/>
+        <Stack.Screen name="HomeMenu" component={HomeMenu}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Profile" component={Profile}/>
         <Stack.Screen name="NewPost" component={NewPost}/>

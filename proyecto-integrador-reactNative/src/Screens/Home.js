@@ -43,6 +43,12 @@ class Home extends Component {
             return (
                 <View>
                     
+                    <TouchableOpacity 
+                        style={styles.postButton} 
+                        onPress={() => this.props.navigation.navigate('SearchUser')}
+                    >
+                        <Text style={styles.postButtonText}>Buscar usuario</Text>
+                    </TouchableOpacity>
                     
 
                     {this.state.loading ? (
@@ -55,17 +61,12 @@ class Home extends Component {
                         />
                     )}
 
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate("NewPost")}>
-                    <Text >Hacer un post </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={styles.postButton} 
-                    onPress={() => this.props.navigation.navigate('SearchUser')}
-                >
-                    <Text style={styles.postButtonText}>Buscar usuario</Text>
-                </TouchableOpacity>
-                
-                <HomeMenu/>
+                    <TouchableOpacity onPress={()=>this.props.navigation.navigate("NewPost")}>
+                        <Text >Hacer un post </Text>
+                    </TouchableOpacity>
+                    
+                    
+                    <HomeMenu/>
           
                 </View>
 
@@ -78,7 +79,21 @@ const styles= StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    postButton: {
+        backgroundColor: "#5C6BC0",
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 20,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        
+    },
+    postButtonText: {
+        color: "white",
+        fontWeight: "bold",
+    },
 })
 
 
