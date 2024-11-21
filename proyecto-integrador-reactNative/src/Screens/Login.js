@@ -19,10 +19,15 @@ class Login extends Component {
             if (user) {
               console.log(user)
                 this.props.navigation.navigate("HomeMenu");
-            }
-            this.setState({ loading: false });
-        });
+            } 
+            else {
+                console.log("No puedes porque no estas logueado")
+                }
+                this.setState({ loading: false });
+
+            });
     }
+
 
     onSubmit(email, password) {
         if (email === "") {

@@ -17,7 +17,10 @@ class Register extends Component{
         auth.onAuthStateChanged(user => {
             console.log(user)
             if(user){
-                this.props.navigation.navigate('Login');
+                this.props.navigation.navigate('HomeMenu');
+            }
+            else {
+                console.log("No puedes porque no estas logueado")
             }
         })
     }

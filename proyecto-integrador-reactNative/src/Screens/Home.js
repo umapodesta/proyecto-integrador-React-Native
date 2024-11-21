@@ -16,9 +16,6 @@ class Home extends Component {
     }
 
     componentDidMount() { 
-        if (firebase.auth().currentUser) {
-            this.setState({ authenticated: true }); 
-
             db.collection('post')
                 .orderBy('createdAt', 'desc')
                 .onSnapshot(docs => {
@@ -32,14 +29,9 @@ class Home extends Component {
                         loading: false,
                     });
                 });
-        } else {
-            console.log("No hay usuario logueado.");
-            this.setState({ loading: false }); 
-        }
-    }
+        } 
 
         render() {
-            
             return (
                 <View>
                     
@@ -71,8 +63,8 @@ class Home extends Component {
                 </View>
 
             );
-        }
-}
+        } 
+    }
 
 const styles= StyleSheet.create({
     container: {

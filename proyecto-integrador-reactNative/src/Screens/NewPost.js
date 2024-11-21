@@ -13,11 +13,6 @@ class NewPost extends Component {
     }
 
     publish(){    
-      if (!firebase.auth().currentUser) {
-          console.log("No hay usuario logueado.");
-        this.props.navigation.navigate("Login"); 
-          return;
-      }
       db.collection('post').add({
           owner: firebase.auth().currentUser.email,  
           post: this.state.post,
