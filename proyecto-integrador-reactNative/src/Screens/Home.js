@@ -11,7 +11,6 @@ class Home extends Component {
         this.state = {
             post: [],     
             loading: true,
-            authenticated: false,
         };
     }
 
@@ -46,10 +45,13 @@ class Home extends Component {
                     {this.state.loading ? (
                         <ActivityIndicator size="large" color="#0000ff" />
                     ) : (
+                        //listado de los post
                         <FlatList
+                            style={styles.postList}
                             data={this.state.post}
                             keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => <Post post={item} email={this.props.email} />}
+                            renderItem={({ item }) => <Post post={item} email={this.props.email}
+                            />}
                         />
                     )}
 
@@ -74,18 +76,23 @@ const styles= StyleSheet.create({
     },
     postButton: {
         backgroundColor: "#5C6BC0",
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 20,
-        flex: 1,
+        paddingVertical: 12, 
+        paddingHorizontal: 20, 
+        borderRadius: 25, 
+        marginVertical: 15, 
         justifyContent: "center",
         alignItems: "center",
-        
     },
+
     postButtonText: {
         color: "white",
         fontWeight: "bold",
+        fontSize: 16,
     },
+    postList: {
+        flex: 1,
+    }
+
 })
 
 
