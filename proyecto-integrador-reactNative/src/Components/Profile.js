@@ -1,135 +1,105 @@
 import React, { Component } from "react";
-import { TouchableOpacity, View, Text, StyleSheet, FlatList } from "react-native";
-import { auth, db } from "../firebase/config"; // Importa Firebase Auth y Firestore.
+import { TouchableOpacity, View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import { auth, db } from "../firebase/config"; 
+import Post from "../components/Post";
+
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userEmail: null,  // Email del usuario autenticado
-            userName: null,   // Nombre de usuario (username)
-            posteos: [],      // Lista de posteos del usuario
-            totalPosteos: 0,  // Contador de posteos
+            userEmail: auth.currentUser?.email || "", 
+            userName: "",                            
+            posteos: [],                             
+            cargando: true,                          
         };
     }
 
+
     componentDidMount() {
-        // Observa el estado de autenticación.
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                this.setState({ userEmail: user.email });
+        // Obtener el username del usuario 
+        db.collection("users")
+            .where("email", "==", this.state.userEmail)
+            .onSnapshot(docs => {
+                docs.forEach(doc => {
+                    this.setState({ userName: doc.data().username });
+                });
+            });
 
-                // Obtener el username asociado al email del usuario
-                db.collection('users')
-                    .where('email', '==', user.email)
-                    .get()
-                    .then(querySnapshot => {
-                        if (!querySnapshot.empty) {
-                            const userData = querySnapshot.docs[0].data();
-                            this.setState({ userName: userData.username });
-                        } else {
-                            console.log("No se encontró el usuario en Firestore.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error al obtener el username:", error);
-                    });
 
-                // Obtener los posteos del usuario
-                this.obtenerPosteos(user.email);
-            } else {
-                // Si no hay usuario autenticado, redirige a Login.
-                this.props.navigation.navigate('Login');
-            }
-        });
-    }
+        // Obtener todos los posteos del usuario
+        db.collection("post")
+            .where("owner", "==", auth.currentUser.email)
+            //.orderBy("createdAt", "desc")
 
-    // Obtener los posteos del usuario
-    obtenerPosteos(email) {
-        db.collection('post')
-            .where('owner', '==', email)
-            .get()
-            .then(querySnapshot => {
-                const posteos = [];
-                querySnapshot.forEach(doc => {
+            .onSnapshot(docs => {
+                let posteos = [];
+                docs.forEach(doc => {
+                    console.log(doc)
                     posteos.push({ id: doc.id, data: doc.data() });
+                    
                 });
                 this.setState({
                     posteos: posteos,
-                    totalPosteos: posteos.length, // Actualiza el contador de posteos
+                    cargando: false, 
                 });
-            })
-            .catch(error => {
-                console.error("Error al obtener los posteos:", error);
             });
     }
 
-    // Eliminar un posteo
+
     borrarPosteo(postId) {
-        db.collection('post')
-            .doc(postId)
-            .delete()
-            .then(() => {
-                console.log("Posteo eliminado");
-                // Actualizar el estado para eliminar el posteo de la lista y restar 1 al contador
-                this.setState(prevState => ({
-                    posteos: prevState.posteos.filter(post => post.id !== postId),
-                    totalPosteos: prevState.totalPosteos - 1,
-                }));
-            })
-            .catch(error => {
-                console.error("Error al eliminar el posteo:", error);
-            });
+        db.collection("post").doc(postId).delete(); 
+        
     }
+
 
     logout() {
-        // Método para cerrar sesión.
         auth.signOut()
             .then(() => {
                 console.log("Sesión cerrada exitosamente.");
-                this.props.navigation.navigate('Login'); // Redirige a Login después del logout.
+                this.props.navigation.navigate("Login"); 
             })
             .catch(error => {
                 console.error("Error al cerrar sesión:", error);
             });
     }
 
+
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Perfil del usuario</Text>
+                <Text style={styles.title}>Perfil del Usuario</Text>
 
-                {/* Mostrar username si está disponible */}
-                {this.state.userName && (
-                    <Text style={styles.info}>Nombre de usuario: {this.state.userName}</Text>
+
+               
+                <Text style={styles.info}>Nombre de usuario: {this.state.userName || "Cargando..."}</Text>
+                <Text style={styles.info}>Email: {this.state.userEmail}</Text>
+                <Text style={styles.info}>Total de posteos: {this.state.posteos.length}</Text>
+
+
+               
+                {this.state.cargando ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+                    <FlatList
+                        data={this.state.posteos}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.post}>
+                                <Post post={item} />
+                                <TouchableOpacity
+                                    style={styles.deleteButton}
+                                    onPress={() => this.borrarPosteo(item.id)}
+                                >
+                                    <Text style={styles.deleteText}>Eliminar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    />
                 )}
 
-                {/* Mostrar email si está disponible */}
-                {this.state.userEmail && (
-                    <Text style={styles.info}>Email: {this.state.userEmail}</Text>
-                )}
 
-                {/* Mostrar cantidad de posteos */}
-                <Text style={styles.info}>Total de posteos: {this.state.totalPosteos}</Text>
-
-                {/* Listar los posteos del usuario */}
-                <FlatList
-                    data={this.state.posteos}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                        <View style={styles.post}>
-                            <Text style={styles.owner}>Posteo: {item.data.post}</Text>
-                            <TouchableOpacity
-                                style={styles.deleteButton}
-                                onPress={() => this.borrarPosteo(item.id)}
-                            >
-                                <Text style={styles.deleteText}>Eliminar</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-
-                {/* Botón de logout */}
+              
                 <TouchableOpacity style={styles.logoutButton} onPress={() => this.logout()}>
                     <Text style={styles.logoutText}>Cerrar sesión</Text>
                 </TouchableOpacity>
@@ -137,6 +107,7 @@ class Profile extends Component {
         );
     }
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -154,21 +125,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 10,
     },
-    logoutButton: {
-        backgroundColor: "#5C6BC0",
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 20,
-    },
-    logoutText: {
-        color: "white",
-        fontWeight: "bold",
-    },
     post: {
         padding: 15,
         borderBottomWidth: 1,
         borderBottomColor: "#ddd",
-        width: '100%',
+        width: "100%",
     },
     deleteButton: {
         backgroundColor: "red",
@@ -179,10 +140,18 @@ const styles = StyleSheet.create({
     deleteText: {
         color: "white",
         textAlign: "center",
-    }
+    },
+    logoutButton: {
+        backgroundColor: "#5C6BC0",
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 20,
+    },
+    logoutText: {
+        color: "white",
+        fontWeight: "bold",
+    },
 });
 
+
 export default Profile;
-
-
-
