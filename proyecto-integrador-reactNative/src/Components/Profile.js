@@ -30,7 +30,7 @@ class Profile extends Component {
         // Obtener todos los posteos del usuario
         db.collection("post")
             .where("owner", "==", auth.currentUser.email)
-            //.orderBy("createdAt", "desc")
+            //.orderBy("owner", "desc")
 
             .onSnapshot(docs => {
                 let posteos = [];
