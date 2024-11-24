@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { db, auth } from '../firebase/config';
-import firebase from 'firebase'
 import Post from '../components/Post';
 import HomeMenu from '../components/HomeMenu';
 
@@ -16,7 +15,7 @@ class Home extends Component {
 
     componentDidMount() { 
             db.collection('post')
-                .orderBy('createdAt', 'desc')
+                .orderBy('createdAt', 'desc') //ordenamos los post de manera descendiente
                 .onSnapshot(docs => {
                     let post = [];
                     docs.forEach(doc => post.push({
@@ -32,8 +31,8 @@ class Home extends Component {
 
         render() {
             return (
-                <View>
-                    
+                <View>  
+                      {/* Boton para buscar usuario */}
                     <TouchableOpacity 
                         style={styles.postButton} 
                         onPress={() => this.props.navigation.navigate('SearchUser')}
@@ -45,7 +44,7 @@ class Home extends Component {
                     {this.state.loading ? (
                         <ActivityIndicator size="large" color="#0000ff" />
                     ) : (
-                        //listado de los post
+                        //listado de todos los posts en donde se puede ver quien lo hizo y el post que realizo
                         <FlatList
                             style={styles.postList}
                             data={this.state.post}
@@ -54,12 +53,8 @@ class Home extends Component {
                             />}
                         />
                     )}
-
-                    <TouchableOpacity onPress={()=>this.props.navigation.navigate("NewPost")}>
-                        <Text >Hacer un post </Text>
-                    </TouchableOpacity>
                     
-                    
+                     {/* Opcion de ver los iconos abajo del todo */}
                     <HomeMenu/>
           
                 </View>
@@ -67,6 +62,7 @@ class Home extends Component {
             );
         } 
     }
+
 
 const styles= StyleSheet.create({
     container: {
