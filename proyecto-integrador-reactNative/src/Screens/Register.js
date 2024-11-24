@@ -20,7 +20,7 @@ class Register extends Component {
       if (user) {
         this.props.navigation.navigate("HomeMenu");
       } else {
-        console.log("No puedes porque no estas logueado");
+        this.props.navigation.navigate("Register");
       }
     });
   }
