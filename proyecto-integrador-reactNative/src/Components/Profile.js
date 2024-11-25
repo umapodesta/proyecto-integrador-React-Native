@@ -8,7 +8,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userEmail: auth.currentUser?.email || "", 
+            userEmail:"", 
             userName: "",                            
             posteos: [],                             
             cargando: true,                          
@@ -19,10 +19,12 @@ class Profile extends Component {
     componentDidMount() {
         // Obtener el username del usuario 
         db.collection("users")
-            .where("email", "==", this.state.userEmail)
+            .where("email", "==", auth.currentUser.email)
             .onSnapshot(docs => {
                 docs.forEach(doc => {
-                    this.setState({ userName: doc.data().username });
+                    this.setState({ userName: doc.data().username,
+                        userEmail: auth.currentUser.email
+                     });
                 });
             });
 
@@ -71,16 +73,17 @@ class Profile extends Component {
                 <Text style={styles.title}>Perfil del Usuario</Text>
 
 
-               
-                <Text style={styles.info}>Nombre de usuario: {this.state.userName || "Cargando..."}</Text>
-                <Text style={styles.info}>Email: {this.state.userEmail}</Text>
-                <Text style={styles.info}>Total de posteos: {this.state.posteos.length}</Text>
 
 
                
                 {this.state.cargando ? (
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
+                 <React.Fragment>                  
+                <Text style={styles.info}>Nombre de usuario: {this.state.userName}</Text>
+                <Text style={styles.info}>Email: {this.state.userEmail}</Text>
+                <Text style={styles.info}>Total de posteos: {this.state.posteos.length}</Text>
+
                     <FlatList
                         data={this.state.posteos}
                         keyExtractor={item => item.id.toString()}
@@ -96,6 +99,7 @@ class Profile extends Component {
                             </View>
                         )}
                     />
+                    </React.Fragment>
                 )}
 
 
