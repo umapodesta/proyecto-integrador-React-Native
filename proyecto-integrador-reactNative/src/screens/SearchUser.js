@@ -56,6 +56,13 @@ class SearchUser extends Component{
       render() {
         return (
           <View style={styles.container}>
+            <TouchableOpacity 
+                        style={styles.postButton} 
+                        onPress={() => this.props.navigation.navigate('HomeMenu')}
+                    >
+                        <Text style={styles.postButtonText}>Volver a Home</Text>
+                    </TouchableOpacity>
+
             <TextInput
               style={styles.input}
               placeholder="Buscar usuario por email o nombre"
@@ -102,6 +109,21 @@ class SearchUser extends Component{
         borderBottomWidth: 1,
         borderColor: '#ccc',
       },
+      postButton: {
+        backgroundColor: "#5C6BC0",
+        paddingVertical: 12, 
+        paddingHorizontal: 20, 
+        borderRadius: 25, 
+        marginVertical: 15, 
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    postButtonText: {
+        color: "white",
+        fontWeight: "bold",
+        fontSize: 16,
+    }
     });
     
 export default SearchUser;
