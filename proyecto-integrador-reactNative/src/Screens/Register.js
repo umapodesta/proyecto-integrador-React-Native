@@ -14,6 +14,7 @@ class Register extends Component {
     };
   }
 
+  
   logout() {
     auth.signOut()
         .then(() => {

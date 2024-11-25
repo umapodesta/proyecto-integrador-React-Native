@@ -17,10 +17,10 @@ class HomeMenu extends Component {
     render() {
         return ( 
             <Tab.Navigator screenOptions={{ headerShown: false }}>
-                <Tab.Screen name="Profile" component={Profile}
-                    options={{ tabBarIcon: () => (<AntDesign name="profile" size={24} color="black" />) }} />
                 <Tab.Screen name="Home" component={Home}
                     options={{ tabBarIcon: () => (<FontAwesome name="home" size={24} color="black" />) }} />
+                <Tab.Screen name="Profile" component={Profile}
+                    options={{ tabBarIcon: () => (<AntDesign name="profile" size={24} color="black" />) }} />
                 <Tab.Screen name="NewPost" component={NewPost}
                     options={{ tabBarIcon: () => (<MaterialIcons name="post-add" size={24} color="black" />) }} />
             </Tab.Navigator>

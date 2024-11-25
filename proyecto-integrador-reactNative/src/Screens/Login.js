@@ -11,8 +11,20 @@ class Login extends Component {
             error: "",
         };
     }
+    componentDidMount() {
+        // Verificar si ya hay un usuario autenticado
+        auth.onAuthStateChanged(user => {
+            if (user) {
+              console.log(user)
+                this.props.navigation.navigate("HomeMenu");
+            } 
+            else {
+                console.log("No puedes porque no estas logueado")
+                }
+                this.setState({ loading: false });
 
-
+            });
+    }
 
 
     onSubmit(email, password) {
