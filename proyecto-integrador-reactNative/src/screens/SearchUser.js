@@ -8,45 +8,51 @@ class SearchUser extends Component{
         super();
         this.state = {
             valorInput: "",
-            usuarios: [],
-            mensajeError: ""
+            users: [],
+            mensajeError: "",
+            usuariosFiltrados: []
         };
     }
 
-    controladorDeCambios(text) {
-        this.setState({ valorInput: text }, () => {
-          this.filtrarUsuarios(text);
-        });
-      }
-      
-    filtrarUsuarios(valorInput){
-        //para que no se realice el pedido si el campo está en blanco
-        if(valorInput === ""){
-            this.setState({ usuariosFiltrados: [], mensaje: "" });
-        return;
-        }
-        db.collection("users")
-        .where("username", ">=", valorInput)
+
+    componentDidMount(){
+      db.collection("users")
         .onSnapshot((usuarioBuscado) => {   
-            let usuarios = [];
+            let users = [];
             usuarioBuscado.forEach((doc)=> {
-                usuarios.push({
+                users.push({
                     id: doc.id,
                     username: doc.data().username,
                     email: doc.data().email,
                 })
             })
-            // Si no se encuentran usuarios, se muestra el mensaje de error
-            if (usuarios.length === 0) {
-              this.setState({ usuarios: [], mensajeError: "No se encontraron usuarios" });
-            } else {
-              this.setState({ usuarios: usuarios, mensajeError: "" });
-            }
-          }, (error) => {
-            console.log("Error al obtener usuarios:", error);
-            this.setState({ mensajeError: "Error al buscar usuarios" });
-          });
+            this.setState({
+              users: users,
+              cargando: false
+            })
+    })}
+
+    controladorDeCambios(text) {
+        let nuevoArray = this.state.users.filter(user => {
+          console.log(user);
+          return user.username.toLowerCase().includes(text.toLowerCase())
+          
+        })
+        this.setState({
+          valorInput: text,
+          usuariosFiltrados : nuevoArray
+        })
+        if (nuevoArray.length === 0) {
+          this.setState({ mensajeError: "No se encontraron usuarios" });
+          return;
       }
+        else {
+          this.setState({ mensajeError: "" })
+        }
+
+      }
+      
+
       render() {
         return (
           <View style={styles.container}>
@@ -62,7 +68,7 @@ class SearchUser extends Component{
             ) : null}
     
             <FlatList
-              data={this.state.usuarios}
+              data={this.state.usuariosFiltrados}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View style={styles.item}>
