@@ -14,17 +14,16 @@ class Register extends Component {
     };
   }
 
-  componentDidMount() {
-    auth.onAuthStateChanged((user) => {
-      console.log(user);
-      if (user) {
-        this.props.navigation.navigate("HomeMenu");
-      } else {
-        this.props.navigation.navigate("Register");
-      }
-    });
-  }
-
+  logout() {
+    auth.signOut()
+        .then(() => {
+            console.log("Sesión cerrada exitosamente.");
+            this.props.navigation.navigate("Login");
+        })
+        .catch(error => {
+            console.error("Error al cerrar sesión:", error);
+        });
+}
   onSubmit(email, password, username) {
     if (email === "") {
       this.setState({ error: "El campo de email es obligatorio." });
@@ -53,6 +52,7 @@ class Register extends Component {
           })
           .then(() => {
             this.setState({ registered: true });
+            this.logout()
             this.props.navigation.navigate("Login");
           });
       })

@@ -13,20 +13,7 @@ class Login extends Component {
         };
     }
 
-    componentDidMount() {
-        // Verificar si ya hay un usuario autenticado
-        auth.onAuthStateChanged(user => {
-            if (user) {
-              console.log(user)
-                this.props.navigation.navigate("HomeMenu");
-            } 
-            else {
-                console.log("No puedes porque no estas logueado")
-                }
-                this.setState({ loading: false });
 
-            });
-    }
 
 
     onSubmit(email, password) {
@@ -49,29 +36,6 @@ class Login extends Component {
     }
 
     render() {
-        if (this.state.loading) {
-            return (
-                <View style={styles.container}>
-                    <Text>Cargando...</Text>
-                </View>
-            );
-        }
-
-        // Si ya está logueado, muestra mensaje y permite redirigir a HomeMenu
-        if (auth.currentUser) {
-            return (
-                <View style={styles.container}>
-                    <Text style={styles.title}>Ya estás logueado</Text>
-                    <Text style={styles.message}>¡Hola! Ya tienes una sesión activa.</Text>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.props.navigation.navigate("HomeMenu")}
-                    >
-                        <Text style={styles.buttonText}>Ir a Home</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        }
 
         return (
             <View style={styles.container}>

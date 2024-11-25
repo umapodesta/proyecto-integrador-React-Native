@@ -48,8 +48,8 @@ class App extends Component {
           ) : (
             // Si no está logueado, muestra las pantallas de Login y Registro
             <React.Fragment>
-              <Stack.Screen name="Register" component={Register} />
               <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Register" component={Register} />
             </React.Fragment>
              
           )}
