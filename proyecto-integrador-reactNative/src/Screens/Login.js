@@ -9,7 +9,6 @@ class Login extends Component {
             email: "",
             password: "",
             error: "",
-            loading: true,
         };
     }
 

@@ -112,7 +112,7 @@ class Register extends Component {
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.noButton} disabled={true}>
+          <TouchableOpacity style={styles.noButton}>
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
         )}
